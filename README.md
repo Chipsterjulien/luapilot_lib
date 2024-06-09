@@ -9,7 +9,7 @@ La bibliothèque LuaPilot est une collection d'utilitaires et de fonctions conç
 Pour utiliser la bibliothèque LuaPilot, clonez le dépôt et compilez le projet en utilisant le script fourni.
 
 ```sh
-git clone <repository_url>
+git clone https://github.com/Chipsterjulien/luapilot_lib.git
 cd luapilot_lib
 ./build_local.sh
 ```
