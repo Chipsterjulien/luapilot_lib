@@ -4,15 +4,6 @@
 
 La bibliothèque LuaPilot est une collection d'utilitaires et de fonctions conçue pour faciliter diverses opérations en Lua. Ce projet fournit divers outils pour la manipulation de fichiers, la gestion de la mémoire, et les opérations sur les tableaux, entre autres.
 
-## Table des matières
-
-- [Installation](#installation)
-- [Utilisation](#utilisation)
-- [Structure du projet](#structure-du-projet)
-- [Compilation](#compilation)
-- [Contribuer](#contribuer)
-- [Licence](#licence)
-
 ## Installation
 
 Pour utiliser la bibliothèque LuaPilot, clonez le dépôt et compilez le projet en utilisant le script fourni.
