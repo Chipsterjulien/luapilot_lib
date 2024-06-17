@@ -7,7 +7,7 @@
 #include "memoryUtils.hpp"
 #include "mergeTablesDeep.hpp"
 #include "split.hpp"
-#include "tableCopy.hpp"
+#include "deepCopyTable.hpp"
 #include <vector>
 #include <string>
 #include <iostream>
@@ -26,7 +26,7 @@ static const struct luaL_Reg luapilot[] = {
     {"helloThere", lua_helloThere},
     {"mergeTables", lua_mergeTablesDeep},
     {"split", lua_split},
-    {"tableDeepCopy", lua_deepCopy},
+    {"deepCopyTable", lua_deepCopy},
     {NULL, NULL}
 };
 

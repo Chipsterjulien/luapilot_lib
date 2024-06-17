@@ -32,8 +32,10 @@ int lua_split(lua_State* L) {
         return luaL_error(L, "Delimiter should be a single character");
     }
 
+    // Effectue l'opération de division
     std::vector<std::string> tokens = split(str, delimiter[0]);
 
+    // Crée une nouvelle table sur la pile Lua
     lua_newtable(L);
     for (size_t i = 0; i < tokens.size(); ++i) {
         lua_pushnumber(L, i + 1);
