@@ -3,8 +3,10 @@
 
 #include <lua.hpp>
 
-// Fonction de copie profonde (deep copy) pour Lua
+// Fonction pour copier une table lua
 void deepCopyTable(lua_State *L, int srcIndex, int destIndex, int &nextIndex);
-int lua_deepCopy(lua_State *L);
+
+// Fonction pour faire une copie profonde d'une table Lua
+int lua_deepCopyTable(lua_State *L);
 
 #endif

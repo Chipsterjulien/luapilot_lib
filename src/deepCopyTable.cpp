@@ -1,5 +1,6 @@
 #include "deepCopyTable.hpp"
 
+// Fonction pour copier une table
 void deepCopyTable(lua_State *L, int srcIndex, int destIndex, int &nextIndex) {
     lua_pushnil(L); // Première clé
     while (lua_next(L, srcIndex) != 0) {
@@ -29,26 +30,26 @@ void deepCopyTable(lua_State *L, int srcIndex, int destIndex, int &nextIndex) {
     }
 }
 
-// Fonction de copie profonde (deep copy) pour Lua
-int lua_deepCopy(lua_State* L) {
-    // Vérifier qu'il y a exactement un argument
-    if (lua_gettop(L) != 1) {
-        return luaL_error(L, "Expected one table as argument");
+// Interface pour la copie d'une table
+int lua_deepCopyTable(lua_State *L) {
+    // Vérifier qu'on a un argument en paramètre
+    int argc = lua_gettop(L);
+    if (argc != 1) {
+        return luaL_error(L, "Expected one argument");
     }
 
     // Vérifier que l'argument est une table
     if (!lua_istable(L, 1)) {
-        return luaL_error(L, "Expected argument to be a table");
+        return luaL_error(L, "Expected a table as argument");
     }
 
     // Créer une nouvelle table pour le résultat
     lua_newtable(L);
-    int resultTableIndex = lua_gettop(L);
 
-    int nextIndex = 1; // Indice pour les clés numériques
-    lua_pushvalue(L, 1); // Copier la table source au sommet de la pile
-    deepCopyTable(L, lua_gettop(L), resultTableIndex, nextIndex); // Copier les éléments
-    lua_pop(L, 1); // Supprimer la copie de la table source
+    // Copier la table source dans la table de destination
+    int nextIndex = 1;
+    deepCopyTable(L, 1, lua_gettop(L), nextIndex);
 
-    return 1; // Retourner la nouvelle table copiée
+    // La nouvelle table copiée est maintenant en haut de la pile
+    return 1;
 }
