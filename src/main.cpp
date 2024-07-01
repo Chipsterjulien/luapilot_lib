@@ -31,12 +31,13 @@ static const struct luaL_Reg luapilot[] = {
     {"currentDir", lua_currentDir},
     {"deepCopyTable", lua_deepCopyTable},
     {"fileExists", lua_fileExists},
+    {"fileSize", lua_fileSize},
     {"getBasename", lua_getBasename},
     {"getExtension", lua_getExtension},
     {"getFilename", lua_getFilename},
     {"getFileSize", lua_fileSize},
     {"link", lua_link},
-    {"getListFiles", lua_listFiles},
+    {"listFiles", lua_listFiles},
     {"getMemoryUsage", lua_getMemoryUsage},
     {"getPath", lua_getPath},
     {"helloThere", lua_helloThere},
@@ -49,13 +50,13 @@ static const struct luaL_Reg luapilot[] = {
     {"split", lua_split},
     {"symlinkattr", lua_symlinkattr},
     {"touch", lua_touch},
+    {"createFileIterator", lua_createFileIterator},
     {NULL, NULL}};
 
 extern "C" int luaopen_luapilot(lua_State *L) {
     luaL_newlib(L, luapilot);
 
-    // Call luaopen_file_iterator to register the file_iterator module
-    luaopen_file_iterator(L);
+    luaL_requiref(L, "file_iterator", luaopen_file_iterator, 1);
     lua_setfield(L, -2, "file_iterator");
 
     return 1;

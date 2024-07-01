@@ -7,60 +7,81 @@
 #include <string>
 
 /**
- * @brief A class to iterate over files in a directory.
+ * @class FileIterator
+ * @brief A class to iterate over files in a directory, optionally recursively.
  */
 class FileIterator {
 public:
     /**
-     * @brief Constructor for FileIterator.
-     * @param path The directory path to iterate.
-     * @param recursive Whether to iterate recursively.
+     * @brief Constructs a FileIterator for the given path.
+     * @param path The directory path to iterate over.
+     * @param recursive If true, iterate recursively through subdirectories.
      */
     FileIterator(const std::string& path, bool recursive);
 
     /**
-     * @brief Get the next file in the iteration.
-     * @return The next file path.
+     * @brief Returns the next file in the directory.
+     * @return The next file as a string.
      */
     const std::string& next();
 
     /**
-     * @brief Check if there are more files to iterate.
+     * @brief Checks if there are more files to iterate over.
      * @return True if there are more files, false otherwise.
      */
     bool hasNext() const;
 
+    /**
+     * @brief Checks if the iterator is closed.
+     * @return True if the iterator is closed, false otherwise.
+     */
+    bool isClosed() const;
+
+    /**
+     * @brief Sets the closed state of the iterator.
+     * @param value The new closed state.
+     */
+    void setClosed(bool value);
+
 private:
     /**
-     * @brief Load files from the given directory.
+     * @brief Loads the files from the given path.
      * @param path The directory path to load files from.
-     * @param recursive Whether to load files recursively.
+     * @param recursive If true, load files recursively from subdirectories.
      */
     void loadFiles(const std::string& path, bool recursive);
 
-    std::vector<std::string> files; ///< List of file paths.
-    std::vector<std::string>::iterator current; ///< Current iterator position.
+    std::vector<std::string> files;
+    std::vector<std::string>::iterator current;
+    bool closed;
 };
 
 extern "C" {
     /**
-     * @brief Create a FileIterator and push it onto the Lua stack.
-     * @param L Lua state.
-     * @return Number of return values.
+     * @brief Creates a new FileIterator and pushes it onto the Lua stack.
+     * @param L The Lua state.
+     * @return The number of return values.
      */
     int lua_createFileIterator(lua_State* L);
 
     /**
-     * @brief Get the next file from the FileIterator.
-     * @param L Lua state.
-     * @return Number of return values.
+     * @brief Gets the next file from the FileIterator.
+     * @param L The Lua state.
+     * @return The number of return values.
      */
     int lua_nextFile(lua_State* L);
 
     /**
-     * @brief Open the FileIterator library in Lua.
-     * @param L Lua state.
-     * @return Number of return values.
+     * @brief Garbage collects the FileIterator.
+     * @param L The Lua state.
+     * @return The number of return values.
+     */
+    int lua_gcFileIterator(lua_State* L);
+
+    /**
+     * @brief Opens the file_iterator module in Lua.
+     * @param L The Lua state.
+     * @return The number of return values.
      */
     int luaopen_file_iterator(lua_State* L);
 }
