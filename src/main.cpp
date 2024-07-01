@@ -1,17 +1,24 @@
 // luapilot.cpp
+#include "attributes.hpp"
 #include "chdir.hpp"
 #include "currentDir.hpp"
 #include "deepCopyTable.hpp"
-#include "helloThere.hpp"
 #include "fileExists.hpp"
+#include "fileIterator.hpp"
 #include "fileSize.hpp"
 #include "fileUtils.hpp"
+#include "helloThere.hpp"
+#include "link.hpp"
 #include "listFiles.hpp"
 #include "memoryUtils.hpp"
 #include "mergeTables.hpp"
-#include "rmdir.hpp"
 #include "mkdir.hpp"
+#include "rmdir.hpp"
+#include "setmode.hpp"
+#include "sleep.hpp"
 #include "split.hpp"
+#include "symlinkattr.hpp"
+#include "touch.hpp"
 #include <vector>
 #include <string>
 #include <iostream>
@@ -19,6 +26,7 @@
 #include <lua.hpp>
 
 static const struct luaL_Reg luapilot[] = {
+    {"attributes", lua_setattr},
     {"chdir", lua_chdir},
     {"currentDir", lua_currentDir},
     {"deepCopyTable", lua_deepCopyTable},
@@ -27,6 +35,7 @@ static const struct luaL_Reg luapilot[] = {
     {"getExtension", lua_getExtension},
     {"getFilename", lua_getFilename},
     {"getFileSize", lua_fileSize},
+    {"link", lua_link},
     {"getListFiles", lua_listFiles},
     {"getMemoryUsage", lua_getMemoryUsage},
     {"getPath", lua_getPath},
@@ -34,11 +43,20 @@ static const struct luaL_Reg luapilot[] = {
     {"mergeTables", lua_mergeTables},
     {"mkdir", lua_mkdir},
     {"rmdir", lua_rmdir},
-    {"rmdir_all", lua_rmdir_all},
+    {"rmdirAll", lua_rmdir_all},
+    {"setmode", lua_setmode},
+    {"sleep", lua_sleep},
     {"split", lua_split},
+    {"symlinkattr", lua_symlinkattr},
+    {"touch", lua_touch},
     {NULL, NULL}};
 
 extern "C" int luaopen_luapilot(lua_State *L) {
     luaL_newlib(L, luapilot);
+
+    // Call luaopen_file_iterator to register the file_iterator module
+    luaopen_file_iterator(L);
+    lua_setfield(L, -2, "file_iterator");
+
     return 1;
 }
