@@ -1,25 +1,40 @@
 // luapilot.cpp
 #include "attributes.hpp"
 #include "chdir.hpp"
+#include "copy.hpp"
+#include "copyTree.hpp"
 #include "currentDir.hpp"
 #include "deepCopyTable.hpp"
 #include "fileExists.hpp"
-#include "fileIterator.hpp"
 #include "fileSize.hpp"
 #include "fileUtils.hpp"
 #include "find.hpp"
 #include "helloThere.hpp"
+#include "isdir.hpp"
+#include "isfile.hpp"
 #include "link.hpp"
 #include "listFiles.hpp"
+#include "md5.hpp"
 #include "memoryUtils.hpp"
 #include "mergeTables.hpp"
 #include "mkdir.hpp"
+#include "moveTree.hpp"
+#include "joinPath.hpp"
+#include "rename.hpp"
+#include "remove.hpp"
 #include "rmdir.hpp"
 #include "setmode.hpp"
+#include "sha1.hpp"
+#include "sha3_256.hpp"
+#include "sha3_512.hpp"
+#include "sha256.hpp"
+#include "sha512.hpp"
 #include "sleep.hpp"
 #include "split.hpp"
 #include "symlinkattr.hpp"
 #include "touch.hpp"
+#include "fileIterator.hpp"
+
 #include <vector>
 #include <string>
 #include <iostream>
@@ -29,6 +44,8 @@
 static const struct luaL_Reg luapilot[] = {
     {"attributes", lua_setattr},
     {"chdir", lua_chdir},
+    {"copy", lua_copy_file},
+    {"copyTree", lua_copyTree},
     {"currentDir", lua_currentDir},
     {"deepCopyTable", lua_deepCopyTable},
     {"fileExists", lua_fileExists},
@@ -37,17 +54,28 @@ static const struct luaL_Reg luapilot[] = {
     {"getBasename", lua_getBasename},
     {"getExtension", lua_getExtension},
     {"getFilename", lua_getFilename},
-    {"getFileSize", lua_fileSize},
     {"getMemoryUsage", lua_getMemoryUsage},
     {"getPath", lua_getPath},
+    {"helloThere", lua_helloThere},
+    {"isdir", lua_isDir},
+    {"isfile", lua_isFile},
     {"link", lua_link},
     {"listFiles", lua_listFiles},
-    {"helloThere", lua_helloThere},
+    {"md5sum", lua_md5sum},
     {"mergeTables", lua_mergeTables},
     {"mkdir", lua_mkdir},
+    {"moveTree", lua_moveTree},
+    {"joinPath", lua_joinPath},
+    {"remove", lua_remove_file},
+    {"rename", lua_rename},
     {"rmdir", lua_rmdir},
     {"rmdirAll", lua_rmdir_all},
     {"setmode", lua_setmode},
+    {"sha1sum", lua_sha1sum},
+    {"sha3_256sum", lua_sha3_256sum},
+    {"sha3_512sum", lua_sha3_512sum},
+    {"sha256sum", lua_sha256sum},
+    {"sha512sum", lua_sha512sum},
     {"sleep", lua_sleep},
     {"split", lua_split},
     {"symlinkattr", lua_symlinkattr},

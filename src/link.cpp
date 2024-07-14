@@ -1,11 +1,10 @@
 #include "link.hpp"
 #include <unistd.h>
 #include <string>
-#include <errno.h>
-#include <cstring>
-#include <lua.hpp>
-#include <limits.h> // For PATH_MAX
-#include <stdlib.h> // For realpath
+#include <system_error>
+#include <limits.h>
+#include <stdlib.h>
+#include <cstring>  // For strlen
 #include <iostream>
 
 /**
@@ -15,52 +14,54 @@
  * 1. The target file or directory to link to.
  * 2. The path where the symbolic link will be created.
  *
- * If successful, it returns true to Lua.
- * If it fails, it returns false and an error message.
+ * If it fails, it returns the error message to Lua.
+ * If successful, it returns nil to Lua.
  *
  * @param L Lua state.
  * @return int Number of return values on the Lua stack.
  */
 int lua_link(lua_State* L) {
+    // Check if there is one argument passed
+    int argc = lua_gettop(L);
+    if (argc != 2) {
+        return luaL_error(L, "Expected two arguments");
+    }
+
     const char* target = luaL_checkstring(L, 1);
     const char* linkpath = luaL_checkstring(L, 2);
 
-    char resolved_target[PATH_MAX];
-    char resolved_linkpath[PATH_MAX];
+    if (strlen(target) >= PATH_MAX || strlen(linkpath) >= PATH_MAX) {
+        lua_pushstring(L, "Path too long");
+        return 1;
+    }
+
+    std::string resolved_target(PATH_MAX, '\0');
+    std::string resolved_linkpath(PATH_MAX, '\0');
 
     // Resolve the absolute path of the target
-    if (realpath(target, resolved_target) == NULL) {
-        lua_pushboolean(L, 0);
-        lua_pushstring(L, std::strerror(errno));
-        return 2;
+    if (realpath(target, &resolved_target[0]) == nullptr) {
+        lua_pushstring(L, std::system_category().message(errno).c_str());
+        return 1;
     }
+
+    // Resize the string to the actual length of the resolved path
+    resolved_target.resize(strlen(resolved_target.c_str()));
 
     // Resolve the absolute path of the link path
-    if (realpath(linkpath, resolved_linkpath) == NULL) {
+    if (realpath(linkpath, &resolved_linkpath[0]) == nullptr) {
         // If the link path does not exist, it's not an error for creating a symlink,
         // so we just use the provided linkpath as it is.
-        strncpy(resolved_linkpath, linkpath, PATH_MAX);
+        resolved_linkpath = linkpath;
+    } else {
+        // Resize the string to the actual length of the resolved path
+        resolved_linkpath.resize(strlen(resolved_linkpath.c_str()));
     }
 
-    // Debugging information
-    std::cout << "Creating symlink from '" << resolved_target << "' to '" << resolved_linkpath << "'" << std::endl;
-
-    if (symlink(resolved_target, resolved_linkpath) != 0) {
-        lua_pushboolean(L, 0);
-        lua_pushstring(L, std::strerror(errno));
-        return 2;
+    if (symlink(resolved_target.c_str(), resolved_linkpath.c_str()) != 0) {
+        lua_pushstring(L, std::system_category().message(errno).c_str());
+        return 1;
     }
 
-    lua_pushboolean(L, 1);
     lua_pushnil(L);
-    return 2;
-}
-
-extern "C" int luaopen_link(lua_State* L) {
-    static const struct luaL_Reg linklib [] = {
-        {"create_symlink", lua_link},
-        {NULL, NULL}
-    };
-    luaL_newlib(L, linklib);
     return 1;
 }
