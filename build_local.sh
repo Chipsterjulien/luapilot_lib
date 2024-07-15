@@ -30,15 +30,10 @@ if ! command -v wget &> /dev/null; then
     exit 1
 fi
 
-# Vérifier si upx est installé
-if ! command -v upx &> /dev/null; then
-    echo "UPX n'est pas installé. Le fichier ne sera pas compressé."
-fi
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BUILD_DIR="${SCRIPT_DIR}/build"
-DOWNLOAD_DIR="${SCRIPT_DIR}/downloads"  # Télécharger à l'extérieur du répertoire build
-LUA_VERSION="5.4.6"
+DOWNLOAD_DIR="${SCRIPT_DIR}/downloads"
+LUA_VERSION="5.4.7"
 LUA_DIR="lua-$LUA_VERSION"
 LUA_TAR="$LUA_DIR.tar.gz"
 LUA_BUILD_DIR="${BUILD_DIR}/lua_build"
@@ -153,8 +148,6 @@ if command -v upx &> /dev/null; then
     original_size_formatted=$(format_size $original_size)
     compressed_size_formatted=$(format_size $compressed_size)
     size_reduction_formatted=$(format_size $size_reduction)
-#    echo "Taille originale de $SHARED_LIB_BUILD : $original_size_formatted"
-#    echo "Taille après compression de $SHARED_LIB_BUILD : $compressed_size_formatted"
     echo "Taille originale : $original_size_formatted"
     echo "Taille après compression : $compressed_size_formatted"
     echo "Réduction de taille : $size_reduction_formatted"
@@ -172,3 +165,9 @@ fi
 echo
 # Indiquer que le processus est terminé
 echo "Compilation terminée avec succès."
+
+
+cd "${SCRIPT_DIR}"
+cp "libraries/luapilot.so" "test/libraries/luapilot.so"
+cd test
+lua main.lua
