@@ -2,11 +2,11 @@
 
 ## Introduction
 
-La bibliothèque LuaPilot est une collection d'utilitaires et de fonctions conçue pour faciliter diverses opérations en Lua. Ce projet fournit divers outils pour la manipulation de fichiers, la gestion de la mémoire, et les opérations sur les tableaux, entre autres.
+The LuaPilot library is a collection of utilities and functions designed to facilitate various operations in Lua. This project provides various tools for file manipulation, text splitting, and table operations, among others.
 
-## Installation
+## Compilation
 
-Pour utiliser la bibliothèque LuaPilot, clonez le dépôt et compilez le projet en utilisant le script fourni.
+If you want to compile the LuaPilot library, clone the repository and compile the project using the provided script.
 
 ```sh
 git clone https://github.com/Chipsterjulien/luapilot_lib.git
@@ -14,50 +14,54 @@ cd luapilot_lib
 ./build_local.sh
 ```
 
-## Utilisation
+## Usage
 
-Une fois compilé, importez le fichier .so dans votre script lua. Voici quelques exemples :
+**Download** library :
+
+Download the [latest library here](https://github.com/Chipsterjulien/luapilot_lib/releases)
+
+For example, put luapilot.so into libraries directory. Below are some examples :
 
 ```lua
-package.cpath = package.cpath .. ";./libraries/?.so" -- Inclusion du path où se trouve notre .so, ici dans le répertoire libraries
+package.cpath = package.cpath .. ";./libraries/?.so" -- Include the path where our .so is located, here in the libraries directory
 
-local luapilot = require("luapilot") -- Importation du module C++ luapilot
+local luapilot = require("luapilot") -- Import the C++ module luapilot
+local inspect = require("inspect")
 
--- Fonction split
-local a = luapilot.split("Bonjour tout le monde", " ")
-for _, e in ipairs(a) do
-    print(e)
+-- List files in a directory
+local files, err = luapilot.listFiles(".")
+if err then
+    print(err)
+else
+    for _, file in ipairs(files) do
+        print(file)
+    end
 end
 
--- Ici on prépare des tables pour les fusionner par la suite
-local table1 = {"a", "b", "c"}
-local table2 = {"d", "e", "f"}
+-- Check if a file exists
+local fileFound, err = luapilot.fileExists("my/folder/file.txt")
+print(err or "File exists: " .. tostring(fileFound))
+
+-- Merge two tables
+local table1 = {a = 1, b = 2}
+local table2 = {b = 3, c = 4}
 local table3 = {"g", "h", "i"}
 local t3 = {i = 8, j = { k = 9, l = 10} }
 local t4 = { i = 8, j = { k = 9, l = 10, m = { n = 11, o = 12, } } }
+local mergedTable = luapilot.mergeTables(table1, table2)
+print(inspect(mergedTable))
 
-print("Merge tables deep")
-local mergedTables = luapilot.mergeTables(table1, table2, table3, t3, t4)
+-- Merge multiple tables
+local mergedMultipleTables = luapilot.mergeTables(table1, table2, {d = 5}, {e = 6}, t4, t3)
+print(inspect(mergedMultipleTables))
 
-print("Deep copy table t4")
-local myNewTable = luapilot.tableDeepCopy(mergedTables)
+-- Make a deep copy of a table
+local deepCopy = luapilot.deepCopyTable(t4)
+print(inspect(deepCopy))
 
--- On veut savoir si un fichier existe
-local path = "my/path/filename.txt"
-local exists = luapilot.fileExists(path)
-
--- On souhaite connaître la taille en ko d'un fichier
-local sizeInKo = luapilot.getFileSize(path)
-
--- D'autres fonctions utiles sur un fichier
-print(luapilot.getBasename(path))
-print(luapilot.getExtension(path))
-print(luapilot.getFilename(path))
-print(luapilot.getPath(path))
-
--- Obtenir la liste récursive des fichiers contenus dans un répertoire
-local filesList = luapilot.getFilesList("my/path/", true)
-for _, filename in ipairs(filesList) do
-    print(filename)
+-- Split a string
+local parts = luapilot.split("hello,world", ",")
+for _, part in ipairs(parts) do
+    print(part)
 end
 ```
