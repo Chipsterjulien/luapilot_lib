@@ -16,7 +16,7 @@ cd luapilot_lib
 
 ## Usage
 
-Download the [latest library here](https://github.com/Chipsterjulien/luapilot_lib/releases)
+You can either use the code you just compiled or download the [latest library here](https://github.com/Chipsterjulien/luapilot_lib/releases)
 
 For example, put luapilot.so into `libraries` directory. Below are some examples in a lua file as `main.lua`
 
