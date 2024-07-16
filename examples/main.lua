@@ -1,4 +1,12 @@
-inspect = require("inspect")
+
+-- Assurez-vous que le chemin vers luapilot.so est dans package.cpath
+-- Ici, nous ajoutons le répertoire `libraries` au chemin de recherche
+package.cpath = package.cpath .. ";./libraries/?.so"
+
+
+-- Charger la bibliothèque
+local luapilot = require("luapilot")
+local inspect = require("inspect")
 
 print("---")
 print("listFiles(path, [optional] recursive)")
