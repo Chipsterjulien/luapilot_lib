@@ -42,7 +42,8 @@
 #include <lua.hpp>
 
 static const struct luaL_Reg luapilot[] = {
-    {"attributes", lua_setattr},
+    {"setAttributes", lua_setattr},
+    {"getAttributes", lua_getattr},
     {"chdir", lua_chdir},
     {"copy", lua_copy_file},
     {"copyTree", lua_copyTree},
