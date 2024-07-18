@@ -23,7 +23,7 @@
 #include "rename.hpp"
 #include "remove.hpp"
 #include "rmdir.hpp"
-#include "setmode.hpp"
+#include "mode.hpp"
 #include "sha1.hpp"
 #include "sha3_256.hpp"
 #include "sha3_512.hpp"
@@ -55,22 +55,23 @@ static const struct luaL_Reg luapilot[] = {
     {"getExtension", lua_getExtension},
     {"getFilename", lua_getFilename},
     {"getMemoryUsage", lua_getMemoryUsage},
+    {"getMode", lua_getmode},
     {"getPath", lua_getPath},
     {"helloThere", lua_helloThere},
     {"isdir", lua_isDir},
     {"isfile", lua_isFile},
+    {"joinPath", lua_joinPath},
     {"link", lua_link},
     {"listFiles", lua_listFiles},
     {"md5sum", lua_md5sum},
     {"mergeTables", lua_mergeTables},
     {"mkdir", lua_mkdir},
     {"moveTree", lua_moveTree},
-    {"joinPath", lua_joinPath},
     {"remove", lua_remove_file},
     {"rename", lua_rename},
     {"rmdir", lua_rmdir},
     {"rmdirAll", lua_rmdir_all},
-    {"setmode", lua_setmode},
+    {"setMode", lua_setmode},
     {"sha1sum", lua_sha1sum},
     {"sha3_256sum", lua_sha3_256sum},
     {"sha3_512sum", lua_sha3_512sum},
