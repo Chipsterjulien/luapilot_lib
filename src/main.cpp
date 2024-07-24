@@ -56,6 +56,7 @@ static const struct luaL_Reg luapilot[] = {
     {"getExtension", lua_getExtension},
     {"getFilename", lua_getFilename},
     {"getMemoryUsage", lua_getMemoryUsage},
+    {"getDetailedMemoryUsage", lua_getDetailedMemoryUsage},
     {"getMode", lua_getmode},
     {"getPath", lua_getPath},
     {"helloThere", lua_helloThere},
